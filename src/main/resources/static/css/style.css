@@ -1,0 +1,18 @@
+.whole_window {
+  width: 100%;
+  height: 100vh;
+}
+
+.centrado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centrado_textos {
+  text-align: center;
+}
+
+.index_btn a {
+  margin: 10px;
+}
