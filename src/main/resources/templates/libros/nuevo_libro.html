@@ -39,11 +39,13 @@
                         </div>
                         <div class="col-md-6">
                             <label for="inputISBN" class="form-label">Código ISBN</label>
-                            <input type="number" class="form-control" id="inputISBN" name="isbn" placeholder="123456..." th:value="${isbn}" required>
+                            <input type="number" class="form-control" id="inputISBN" name="isbn" placeholder="123456..."
+                                th:value="${isbn}" required>
                         </div>
                         <div class="col-12">
                             <label for="inputAutor" class="form-label">Nombre del Autor</label>
-                            <input type="text" class="form-control" id="inputAutor" name="nombreAutor" placeholder="H.P. Lovecraft..." th:value="${nombreAutor}" required>
+                            <input type="text" class="form-control" id="inputAutor" name="nombreAutor"
+                                placeholder="H.P. Lovecraft..." th:value="${nombreAutor}" required>
                         </div>
                         <div class="col-12">
                             <label for="inputEditorial" class="form-label">Nombre de la Editorial</label>
@@ -52,7 +54,8 @@
                         </div>
                         <div class="col-md-4">
                             <label for="inputAnio" class="form-label">Año de publicación</label>
-                            <input type="number" class="form-control" id="inputAnio" name="anio" placeholder="2015" th:value="${anio}" required>
+                            <input type="number" class="form-control" id="inputAnio" name="anio" placeholder="2015"
+                                th:value="${anio}" required>
                         </div>
                         <div class="col-md-4">
                             <label for="inputEjemplares" class="form-label">Ejemplares totales</label>
@@ -68,6 +71,10 @@
                             <button type="submit" class="btn btn-primary">¡Guardar libro!</button>
                         </div>
                     </form>
+                    <div class="espacios centrado">
+                        <a type="button" class="btn btn-outline-warning" th:href="@{/libros/}">Volver al
+                            Menú Libros</a>
+                    </div>
                 </div>
             </div>
         </div>

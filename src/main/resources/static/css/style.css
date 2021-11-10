@@ -3,6 +3,11 @@
   height: 100vh;
 }
 
+.espacios {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 .centrado {
   display: flex;
   justify-content: center;
