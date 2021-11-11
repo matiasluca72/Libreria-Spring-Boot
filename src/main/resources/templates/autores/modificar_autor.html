@@ -17,32 +17,31 @@
     <section class="whole_window">
         <div class="row centrado whole_window">
             <div class="col-8">
-                <div th:if="${exito} != null" class="card text-white bg-success mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">¡Éxito!</h5>
-                        <p class="card-text" th:text="${exito}"></p>
-                    </div>
-                </div>
+                
                 <div th:if="${error} != null" class="card text-white bg-danger mb-3">
                     <div class="card-body">
                         <h5 class="card-title">¡Ups!</h5>
                         <p class="card-text" th:text="${error}"></p>
                     </div>
                 </div>
-                <h1>Ingresar un nuevo Autor</h1>
+                <h1>Modificar Autor</h1>
                 <div>
-                    <form class="row g-3" th:action="@{/autores/nuevo_autor}" method="POST">
+                    <!-- Uso de una variable de pre-procesamiento -->
+                    <form class="row g-3" th:action="@{/autores/modificar/__${autor.id}__}" method="POST">
+                        <!-- Input invisible con el valor del id y el nombre "id" -->
+                        <input hidden th:value="${autor.id}" name="id">
                         <div class="col-md-6">
-                            <label for="inputTitulo" class="form-label">Nombre del Autor</label>
-                            <input type="text" class="form-control" id="inputTitulo" name="nombre"
-                                placeholder="Ingrese el nombre de su autor..." th:value="${nombre}" required>
+                            <label for="inputTitulo" class="form-label">Nombre nuevo del Autor</label>
+                            <!-- Auto-completo el valor del input con la etiqueta th:value="${autor.nombre}" para mejorar UX -->
+                            <input type="text" class="form-control" id="inputTitulo" th:value="${autor.nombre}" name="nombre"
+                                placeholder="Ingrese el nombre de su autor..." required>
                         </div>
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary">¡Guardar autor!</button>
+                            <button type="submit" class="btn btn-primary">¡Actualizar autor!</button>
                         </div>
                     </form>
                     <div class="espacios centrado">
-                        <a type="button" class="btn btn-outline-warning" th:href="@{/autores/}">Volver al Menú
+                        <a type="button" class="btn btn-outline-warning" th:href="@{/autores/listado_autores}">Volver al listado
                             Autores</a>
                     </div>
                 </div>
