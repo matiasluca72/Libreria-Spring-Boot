@@ -47,8 +47,11 @@ public class AutorService {
         if (respuesta.isPresent()) {
             Autor autor = respuesta.get();
 
+            //Verificamos que el nombre nuevo sea diferente al actual y que este no coincida con otro ya existente
             if (autor.getNombre().equals(nombre)) {
                 throw new AutorServiceException("Debe ingresar un nombre diferente al actual.");
+            } else if (autorRepositorio.buscarPorNombre(nombre) != null) {
+                throw new AutorServiceException("El nombre de autor que intenta modificar ya existe.");
             }
 
             autor.setNombre(nombre);

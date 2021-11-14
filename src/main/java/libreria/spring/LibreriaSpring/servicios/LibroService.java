@@ -1,5 +1,6 @@
 package libreria.spring.LibreriaSpring.servicios;
 
+import java.util.List;
 import java.util.Optional;
 import libreria.spring.LibreriaSpring.entidades.Libro;
 import libreria.spring.LibreriaSpring.excepciones.AutorServiceException;
@@ -36,7 +37,7 @@ public class LibroService {
         nombreEditorial = nombreEditorial.trim();
 
         //Validamos los parámetros
-        verificar(isbn, titulo, anio, ejemplares, ejemplaresPrestados, nombreAutor, nombreEditorial);
+        verificar(isbn, titulo, anio, ejemplares, ejemplaresPrestados, nombreAutor, nombreEditorial, true);
 
         //Creación del Objeto Libro
         Libro libro = new Libro();
@@ -67,7 +68,7 @@ public class LibroService {
         nombreEditorial = nombreEditorial.trim();
 
         //Validamos los parámetros
-        verificar(isbn, titulo, anio, ejemplares, ejemplaresPrestados, nombreAutor, nombreEditorial);
+        verificar(isbn, titulo, anio, ejemplares, ejemplaresPrestados, nombreAutor, nombreEditorial, false);
 
         //Buscamos el Libro a modificar
         Optional<Libro> respuesta = libroRepositorio.findById(idLibro);
@@ -75,6 +76,8 @@ public class LibroService {
         if (respuesta.isPresent()) {
 
             Libro libro = respuesta.get();
+
+            verificarCambios(libro, isbn, titulo, anio, ejemplares, ejemplaresPrestados, nombreAutor, nombreEditorial);
 
             //Seteamos los atributos
             libro.setIsbn(isbn);
@@ -110,6 +113,7 @@ public class LibroService {
         }
     }
 
+    @Transactional
     public void darAlta(String idLibro) throws LibroServiceException {
 
         Optional<Libro> respuesta = libroRepositorio.findById(idLibro);
@@ -123,16 +127,48 @@ public class LibroService {
         }
     }
 
-    @Transactional
-    public void verificar(Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, String nombreAutor, String nombreEditorial) throws LibroServiceException {
+    @Transactional(readOnly = true)
+    public Libro buscarPorId(String id) throws LibroServiceException {
+        Optional<Libro> respuesta = libroRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            return respuesta.get();
+        } else {
+            throw new LibroServiceException("No se ha encontrado el libro solicitado.");
+        }
+    }
 
-        if (libroRepositorio.buscarPorIsbn(isbn) != null) {
+    @Transactional(readOnly = true)
+    public List<Libro> listarTodos() throws LibroServiceException {
+        try {
+            return libroRepositorio.findAll();
+        } catch (Exception e) {
+            throw new LibroServiceException("Hubo un problema para traer todos los libros.");
+        }
+    }
+
+    /**
+     * Método privado para verificar todos los nuevos atributos de un Libro y lanzar una excepción si alguno no es válido según diferentes criterios
+     *
+     * @param isbn Si es un nuevo libro, no puede estar repetido. Tampoco puede estar null
+     * @param titulo Si es un nuevo libro, no puede estar repetido. Tampoco puede estar null
+     * @param anio No puede ser mayor al año actual ni estar null
+     * @param ejemplares Su valor restado la cantidad de prestados no puede ser menor a 0
+     * @param ejemplaresPrestados Su valor restandolo con el total no puede ser menor a 0
+     * @param nombreAutor No puede estar vacío ni null
+     * @param nombreEditorial No puede estar vacío ni null
+     * @param nuevoLibro Boolean para determinar si es un nuevo libro (true) o estamos modificando uno ya existente (false)
+     * @throws LibroServiceException
+     */
+    @Transactional
+    private void verificar(Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, String nombreAutor, String nombreEditorial, boolean nuevoLibro) throws LibroServiceException {
+
+        if (libroRepositorio.buscarPorIsbn(isbn) != null && nuevoLibro) {
             throw new LibroServiceException("El ISBN ingresado ya pertenece a otro libro.");
         } else if (isbn == null) {
             throw new LibroServiceException("El ISBN no puede estar vacío.");
         }
 
-        if (libroRepositorio.buscarPorTitulo(titulo) != null) {
+        if (libroRepositorio.buscarPorTitulo(titulo) != null && nuevoLibro) {
             throw new LibroServiceException("El libro con el titulo ingresado ya existe.");
         } else if (titulo.isEmpty() || titulo == null) {
             throw new LibroServiceException("El titulo del libro no puede estar vacío.");
@@ -156,6 +192,25 @@ public class LibroService {
 
         if (nombreEditorial.isEmpty() || nombreEditorial == null) {
             throw new LibroServiceException("El nombre de la Editorial no puede estar vacio.");
+        }
+    }
+
+    /**
+     * Verificación de que se haya ingresado al menos un cambio en el formulario de modifica libro. Si todos los argumentos recibidos son idénticos a los atributos
+     * actuales del libro, se larga una excepción con el mensaje de que no se ha registrado ningún cambio
+     * @param libro
+     * @param isbn
+     * @param titulo
+     * @param anio
+     * @param ejemplares
+     * @param ejemplaresPrestados
+     * @param nombreAutor
+     * @param nombreEditorial
+     * @throws LibroServiceException Si no se detecta ningún cambio en el formulario de Libro 
+     */
+    private void verificarCambios(Libro libro, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, String nombreAutor, String nombreEditorial) throws LibroServiceException {
+        if (libro.getIsbn().equals(isbn) && libro.getTitulo().equals(titulo) && libro.getAnio().equals(anio) && libro.getEjemplares().equals(ejemplares) && libro.getEjemplaresPrestados().equals(ejemplaresPrestados) && libro.getAutor().getNombre().equals(nombreAutor) && libro.getEditorial().getNombre().equals(nombreEditorial)) {
+            throw new LibroServiceException("No se ha registrado ningún cambio.");
         }
     }
 }

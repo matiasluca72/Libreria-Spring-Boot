@@ -1,5 +1,6 @@
 package libreria.spring.LibreriaSpring.servicios;
 
+import java.util.List;
 import java.util.Optional;
 import libreria.spring.LibreriaSpring.entidades.Editorial;
 import libreria.spring.LibreriaSpring.excepciones.EditorialServiceException;
@@ -45,6 +46,13 @@ public class EditorialService {
         Optional<Editorial> respuesta = editorialRepositorio.findById(idEditorial);
         if (respuesta.isPresent()) {
             Editorial editorial = respuesta.get();
+
+            if (editorial.getNombre().equals(nombre)) {
+                throw new EditorialServiceException("Debe ingresar un nombre diferente al actual.");
+            } else if (editorialRepositorio.buscarPorNombre(nombre) != null) {
+                throw new EditorialServiceException("El nombre de editorial que intenta modificar ya existe.");
+            }
+
             editorial.setNombre(nombre);
             editorial.setAlta(true);
             editorialRepositorio.save(editorial);
@@ -67,7 +75,7 @@ public class EditorialService {
     }
 
     @Transactional
-    public void darAtla(String idEditorial) throws EditorialServiceException {
+    public void darAlta(String idEditorial) throws EditorialServiceException {
 
         Optional<Editorial> respuesta = editorialRepositorio.findById(idEditorial);
         if (respuesta.isPresent()) {
@@ -76,6 +84,25 @@ public class EditorialService {
             editorialRepositorio.save(editorial);
         } else {
             throw new EditorialServiceException("No se ha encontrado la editorial solicitada.");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Editorial buscarPorId(String id) throws EditorialServiceException {
+        Optional<Editorial> respuesta = editorialRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            return respuesta.get();
+        } else {
+            throw new EditorialServiceException("No se ha encontrado la editorial solicitada.");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Editorial> listarTodos() throws EditorialServiceException {
+        try {
+            return editorialRepositorio.findAll();
+        } catch (Exception e) {
+            throw new EditorialServiceException("Hubo un problema para traer todas las editoriales.");
         }
     }
 

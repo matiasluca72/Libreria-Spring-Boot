@@ -32,7 +32,7 @@ public class AutorController {
      */
     @GetMapping("/")
     public String autores() {
-        return "autores/autores.html";
+        return "autores/autores";
     }
 
     /**
@@ -42,7 +42,7 @@ public class AutorController {
      */
     @GetMapping("/nuevo_autor")
     public String nuevo_autor() {
-        return "autores/nuevo_autor.html";
+        return "autores/nuevo_autor";
     }
 
     /**
@@ -60,13 +60,12 @@ public class AutorController {
             autorService.crearNuevoAutor(nombre);
             modelo.put("exito", "¡Autor guardado con éxito!");
 
-        } catch (Exception e) {
+        } catch (AutorServiceException e) {
 
             modelo.put("error", "¡Algo salió mal! " + e.getMessage());
             modelo.put("nombre", nombre);
         }
-
-        return "autores/nuevo_autor.html";
+        return "autores/nuevo_autor";
     }
 
     /**
@@ -83,11 +82,11 @@ public class AutorController {
             List<Autor> autores = autorService.listarTodos();
             //Utilizo otro método de ModelMap para inyectar una key "autores" que contenga la lista
             modelo.addAttribute("autores", autores);
-        } catch (Exception e) {
-            System.out.println("Hubo un problema: " + e.getMessage());
+        } catch (AutorServiceException e) {
+            modelo.put("error", "Hubo un problema: " + e.getMessage());
         }
 
-        return "autores/listado_autores.html";
+        return "autores/listado_autores";
     }
 
     /**
@@ -102,10 +101,10 @@ public class AutorController {
 
         try {
             modelo.put("autor", autorService.buscarPorId(id));
-        } catch (Exception e) {
+        } catch (AutorServiceException e) {
             modelo.put("error", "Algo salió mal: " + e.getMessage());
         }
-        return "autores/modificar_autor.html";
+        return "autores/modificar_autor";
     }
 
     @PostMapping("/modificar/{id}") //El {id} es el que se recibe como parámetro con la anotación @PathVariable
@@ -121,12 +120,28 @@ public class AutorController {
             modelo.addAttribute("autores", autores);
             return "autores/listado_autores.html"; */
             
-        } catch (Exception e) {
+            /* Llega a la página correctamente pero no logra llevarse consigo el ModelMap,
+            por lo cual nunca muestra el mensaje de éxito/error
+            return "redirect:/autores/listado_autores"; */
+            
+            /* Método encontrado en Google, pero no funciona (o al menos no está bien implementado)
+            attr.addAttribute("exito", "¡Autor modificado con éxito!"); */
+            
+            
+        } catch (AutorServiceException e) {
             modelo.put("error", "¡Algo salió mal! " + e.getMessage());
             return modificarAutor(id, modelo);
             
-            // Same as above: alternativa que no termina de funcionar
-            //return "autores/modificar/" + id;
+            /* Alternativa para devolver la vista, pero da errores de servidor
+            return "autores/modificar/" + id; */
+            
+            /* Llega a la página correctamente pero no logra llevarse consigo el ModelMap,
+            por lo cual nunca muestra el mensaje de éxito/error
+            return "redirect:/autores/modificar/" + id; */
+            
+            /* Método encontrado en Google, pero no funciona (o al menos no está bien implementado)
+            attr.addAttribute("error", "¡Algo salió mal! " + e.getMessage()); */
+            
         }
 
     }
