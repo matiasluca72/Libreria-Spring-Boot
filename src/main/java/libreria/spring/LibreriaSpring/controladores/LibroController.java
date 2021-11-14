@@ -1,7 +1,6 @@
 package libreria.spring.LibreriaSpring.controladores;
 
 import java.util.List;
-import libreria.spring.LibreriaSpring.entidades.Autor;
 import libreria.spring.LibreriaSpring.entidades.Libro;
 import libreria.spring.LibreriaSpring.excepciones.AutorServiceException;
 import libreria.spring.LibreriaSpring.excepciones.EditorialServiceException;
@@ -34,7 +33,7 @@ public class LibroController {
 
     @GetMapping("/nuevo_libro")
     public String nuevo_libro() {
-        return "libros/nuevo_libro.html";
+        return "libros/nuevo_libro";
     }
 
     @PostMapping("/nuevo_libro")
