@@ -122,6 +122,22 @@ public class EditorialService {
             return editorial;
         }
     }
+    
+     protected Editorial modificarEditorialDesdeLibro(String nombreActual, String nombreNuevo) throws EditorialServiceException {
+        
+        nombreNuevo = nombreNuevo.trim();
+        verificar(nombreNuevo);
+        
+        Editorial editorial = editorialRepositorio.buscarPorNombre(nombreActual);
+        if (nombreNuevo.equals(nombreActual)) {
+            return editorial;
+        } else {
+            editorial.setNombre(nombreNuevo);
+            editorial.setAlta(true);
+            return editorialRepositorio.save(editorial);
+        }
+        
+    }
 
     private void verificar(String nombre) throws EditorialServiceException {
         if (nombre.isEmpty() || nombre == null) {

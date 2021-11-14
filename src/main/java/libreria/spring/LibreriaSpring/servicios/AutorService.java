@@ -136,6 +136,22 @@ public class AutorService {
             return autor;
         }
     }
+    
+    protected Autor modificarAutorDesdeLibro(String nombreActual, String nombreNuevo) throws AutorServiceException {
+        
+        nombreNuevo = nombreNuevo.trim();
+        verificar(nombreNuevo);
+        
+        Autor autor = autorRepositorio.buscarPorNombre(nombreActual);
+        if (nombreNuevo.equals(nombreActual)) {
+            return autor;
+        } else {
+            autor.setNombre(nombreNuevo);
+            autor.setAlta(true);
+            return autorRepositorio.save(autor);
+        }
+        
+    }
 
     private void verificar(String nombre) throws AutorServiceException {
         if (nombre.isEmpty() || nombre == null) {

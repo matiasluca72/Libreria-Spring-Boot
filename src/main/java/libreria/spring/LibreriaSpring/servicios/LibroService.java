@@ -89,8 +89,8 @@ public class LibroService {
             libro.setAlta(true);
 
             //Seteamos Autor y Editorial
-            libro.setAutor(autorService.buscarCrearAutor(nombreAutor));
-            libro.setEditorial(editorialService.buscarCrearEditorial(nombreEditorial));
+            libro.setAutor(autorService.modificarAutorDesdeLibro(libro.getAutor().getNombre(), nombreAutor));
+            libro.setEditorial(editorialService.modificarEditorialDesdeLibro(libro.getEditorial().getNombre(), nombreEditorial));
 
             //Persistimos el libro en la base de datos
             libroRepositorio.save(libro);
