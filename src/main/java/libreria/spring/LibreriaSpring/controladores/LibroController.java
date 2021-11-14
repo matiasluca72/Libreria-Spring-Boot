@@ -98,7 +98,7 @@ public class LibroController {
             modelo.put("error", "¡Algo salió mal! " + e.getMessage());
             return modificarLibro(id, modelo);
         }
-    }
+    } 
     
     @GetMapping("/baja/{id}")
     public String darBaja(@PathVariable String id, ModelMap modelo) {
