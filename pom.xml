@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>libreria.spring</groupId>
-	<artifactId>LibreriaSpring</artifactId>
+	<artifactId>LibreriaSpring2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>LibreriaSpring</name>
+	<name>LibreriaSpring2</name>
 	<description>Proyecto de gestión de Libros Egg utilizando Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>

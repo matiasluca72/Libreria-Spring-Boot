@@ -26,10 +26,10 @@ public class LibroController {
     @Autowired
     private LibroService libroService;
 
-    @GetMapping("/")
-    public String libros() {
-        return "libros/libros.html";
-    }
+//    @GetMapping("/")
+//    public String libros() {
+//        return "libros/libros.html";
+//    }
 
     @GetMapping("/nuevo_libro")
     public String nuevo_libro() {

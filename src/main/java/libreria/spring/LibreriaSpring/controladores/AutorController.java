@@ -140,10 +140,8 @@ public class AutorController {
             return "redirect:/autores/modificar/" + id; */
             
             /* Método encontrado en Google, pero no funciona (o al menos no está bien implementado)
-            attr.addAttribute("error", "¡Algo salió mal! " + e.getMessage()); */
-            
+            attr.addAttribute("error", "¡Algo salió mal! " + e.getMessage()); */ 
         }
-
     }
     
     @GetMapping("/baja/{id}")

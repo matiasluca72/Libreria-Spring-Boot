@@ -159,7 +159,7 @@ public class LibroService {
      * @param nuevoLibro Boolean para determinar si es un nuevo libro (true) o estamos modificando uno ya existente (false)
      * @throws LibroServiceException
      */
-    @Transactional
+    @Transactional(readOnly = true)
     private void verificar(Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, String nombreAutor, String nombreEditorial, boolean nuevoLibro) throws LibroServiceException {
 
         if (libroRepositorio.buscarPorIsbn(isbn) != null && nuevoLibro) {
