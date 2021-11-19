@@ -36,6 +36,8 @@
                     <li class="nav-item"><a class="nav-link" href="#libros">Libros</a></li>
                     <li class="nav-item"><a class="nav-link" href="#autores">Autores</a></li>
                     <li class="nav-item"><a class="nav-link" href="#editoriales">Editoriales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#clientes">Clientes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#prestamos">Préstamos</a></li>
                 </ul>
             </div>
         </div>
@@ -80,7 +82,7 @@
         <div class="container-fluid p-0">
             <div class="row g-0">
                 <div class="col-lg-12 elegir-categoria bg-dark text-white">
-                    <h2 class="text-center">- Escoge una categoria -</h2>
+                    <h2 class="text-center">- Administrar libreria -</h2>
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <a class="inicio-box" href="#libros" title="Libros">
@@ -102,11 +104,31 @@
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <a class="inicio-box" href="#editoriales" title="Editoriales">
-                        <img class="img-fluid" src="assets/img/thumbnails/editorial.jpg"
-                            alt="Menú Editoriales" />
+                        <img class="img-fluid" src="assets/img/thumbnails/editorial.jpg" alt="Menú Editoriales" />
                         <div class="inicio-box-caption">
                             <div class="project-category text-white-50">Editoriales</div>
                             <div class="project-name">Ingresa al Menú Editoriales</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-12 elegir-categoria bg-dark text-white">
+                    <h2 class="text-center">- Administrar clientes & préstamos -</h2>
+                </div>
+                <div class="col-lg-6 col-sm-9">
+                    <a class="inicio-box" href="#clientes" title="Clientes">
+                        <img class="img-fluid" src="assets/img/thumbnails/clientes.jpg" alt="Menú Clientes" />
+                        <div class="inicio-box-caption">
+                            <div class="project-category text-white-50">Clientes</div>
+                            <div class="project-name">Ingresa al Menú Clientes</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-6 col-sm-9">
+                    <a class="inicio-box" href="#prestamos" title="Préstamos">
+                        <img class="img-fluid" src="assets/img/thumbnails/prestamo.jpg" alt="Menú Préstamos" />
+                        <div class="inicio-box-caption">
+                            <div class="project-category text-white-50">Préstamos</div>
+                            <div class="project-name">Ingresa al Menú Préstamos</div>
                         </div>
                     </a>
                 </div>
@@ -134,9 +156,26 @@
         <div class="container px-4 px-lg-5 text-center menu_btn">
             <h2 class="mb-4">Menú Editoriales</h2>
             <a class="btn btn-light btn-xl" th:href="@{/editoriales/nueva_editorial}">Ingresar una nueva
-                Editorial </a>
+                Editorial</a>
             <a class="btn btn-warning btn-xl" th:href="@{/editoriales/listado_editoriales}">Listar
                 Editoriales</a>
+        </div>
+    </section>
+    <section class=" page-section bg-warning text-white" id="clientes">
+        <div class="container px-4 px-lg-5 text-center menu_btn">
+            <h2 class="mb-4">Menú Clientes</h2>
+            <a class="btn btn-light btn-xl" th:href="@{/clientes/nuevo_cliente}">Ingresar un nuevo Cliente</a>
+            <a class="btn btn-warning btn-xl" th:href="@{/clientes/listado_clientes}">Listar
+                Clientes</a>
+        </div>
+    </section>
+    <section class=" page-section bg-light" id="prestamos">
+        <div class="container px-4 px-lg-5 text-center menu_btn">
+            <h2 class="mb-4">Menú Préstamos</h2>
+            <a class="btn btn-light btn-xl" th:href="@{/prestamos/nuevo_prestamo}">Registrar
+                Préstamo</a>
+            <a class="btn btn-warning btn-xl" th:href="@{/prestamos/listado_prestamos}">Listar
+                Préstamos</a>
         </div>
     </section>
 

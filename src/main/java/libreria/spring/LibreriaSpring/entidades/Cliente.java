@@ -29,7 +29,13 @@ public class Cliente {
     //RELACIONES
     @OneToMany(mappedBy = "cliente")
     private List<Prestamo> prestamos;
-
+    private Integer cantidadPrestamos;
+    
+    //CONSTRUCTOR CON cantidadPrestamos INICIALIZADO
+    public Cliente() {
+        cantidadPrestamos = 0;
+    }
+    
     //GETTERS AND SETTERS
     /**
      * @return the id
@@ -127,5 +133,19 @@ public class Cliente {
      */
     public void setPrestamos(List<Prestamo> prestamos) {
         this.prestamos = prestamos;
+    }
+
+    /**
+     * @return the cantidadPrestamos
+     */
+    public Integer getCantidadPrestamos() {
+        return cantidadPrestamos;
+    }
+
+    /**
+     * @param cantidadPrestamos the cantidadPrestamos to set
+     */
+    public void setCantidadPrestamos(Integer cantidadPrestamos) {
+        this.cantidadPrestamos = cantidadPrestamos;
     }
 }

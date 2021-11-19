@@ -19,7 +19,7 @@
     <!-- SimpleLightbox plugin CSS-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="../css/styles.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
 </head>
 
 <body id="page-top">
@@ -43,32 +43,42 @@
         </div>
     </nav>
     <!-- Masthead-->
-    <header class="masthead min-vh-100 align-items-center centrado">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 align-items-center bi-text-left">
+    <header class="masthead min-vh-100">
+        <div class="container px-4 px-lg-5 ">
+            <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center bi-text-left">
                 <div class="col-lg-8 text-white espacios">
-                    <div th:if="${exito} != null" class="card text-white bg-success mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">¡Éxito!</h5>
-                            <p class="card-text" th:text="${exito}"></p>
-                        </div>
-                    </div>
                     <div th:if="${error} != null" class="card text-white bg-danger mb-3">
                         <div class="card-body">
                             <h5 class="card-title">¡Ups!</h5>
                             <p class="card-text" th:text="${error}"></p>
                         </div>
                     </div>
-                    <h1>Ingresar un nuevo autor</h1>
+                    <h1>Modificar préstamo</h1>
                     <div>
-                        <form class="row g-3" th:action="@{/autores/nuevo_autor}" method="POST">
+                        <!-- Uso de una variable de pre-procesamiento -->
+                        <form class="row g-3" th:action="@{/prestamos/modificar/__${prestamo.id}__}" method="POST">
+                            <!-- Input invisible con el valor del id y el nombre "id" -->
+                            <input hidden th:value="${prestamo.id}" name="id">
                             <div class="col-md-6">
-                                <label for="inputTitulo" class="form-label">Nombre del Autor</label>
-                                <input type="text" class="form-control" id="inputTitulo" name="nombre"
-                                    placeholder="Ingrese el nombre de su autor..." th:value="${nombre}" required>
+                                <label for="inputCliente" class="form-label">Nuevo cliente del prestamo</label>
+                                <!-- Uso de th:selected="${variable o condición}" para prefijar el valor actual del prestamo -->
+                                <select class="form-control" name="idCliente" id="inputCliente" required>
+                                    <option th:each="cliente : ${clientes}" th:value="${cliente.id}"
+                                        th:text="${cliente.nombre}" th:selected="${cliente.id==prestamo.cliente.id}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputLibro" class="form-label">Nuevo libro prestado</label>
+                                <!-- Uso de th:selected="${variable o condición}" para prefijar el valor actual del prestamo -->
+                                <select class="form-control" name="idLibro" id="inputLibro" required>
+                                    <option th:each="libro : ${libros}" th:value="${libro.id}" th:text="${libro.titulo}"
+                                        th:selected="${libro.id==prestamo.libro.id}">
+                                    </option>
+                                </select>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">¡Guardar autor!</button>
+                                <button type="submit" class="btn btn-primary">¡Actualizar préstamo!</button>
                             </div>
                         </form>
                     </div>

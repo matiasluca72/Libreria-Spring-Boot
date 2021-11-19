@@ -1,8 +1,10 @@
 package libreria.spring.LibreriaSpring.servicios;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import libreria.spring.LibreriaSpring.entidades.Cliente;
+import libreria.spring.LibreriaSpring.entidades.Prestamo;
 import libreria.spring.LibreriaSpring.excepciones.ClienteServiceException;
 import libreria.spring.LibreriaSpring.repositorios.ClienteRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,6 +136,19 @@ public class ClienteService {
         } catch (Exception e) {
             throw new ClienteServiceException("Hubo un problema para traer a los clientes.");
         }
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Prestamo> listarPrestamosActivos(Cliente cliente) {
+        
+        List<Prestamo> prestamos = cliente.getPrestamos();
+        List<Prestamo> prestamosActivos = new ArrayList();
+        for (Prestamo prestamo : prestamos) {
+            if (prestamo.getAlta()) {
+                prestamosActivos.add(prestamo);
+            }
+        }
+        return prestamosActivos;
     }
 
     @Transactional(readOnly = true)

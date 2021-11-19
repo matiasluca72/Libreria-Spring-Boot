@@ -19,7 +19,9 @@
     <!-- SimpleLightbox plugin CSS-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="../css/styles.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/58348e275d.js" crossorigin="anonymous"></script>
 </head>
 
 <body id="page-top">
@@ -43,10 +45,10 @@
         </div>
     </nav>
     <!-- Masthead-->
-    <header class="masthead min-vh-100 align-items-center centrado">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 align-items-center bi-text-left">
-                <div class="col-lg-8 text-white espacios">
+    <header class="masthead min-vh-100">
+        <div class="container px-4">
+            <div class="row gx-4 gx-lg-5 h-100 align-items-start justify-content-start bi-text-left">
+                <div class="col-lg-12 text-white espacios align-items-start">
                     <div th:if="${exito} != null" class="card text-white bg-success mb-3">
                         <div class="card-body">
                             <h5 class="card-title">¡Éxito!</h5>
@@ -59,24 +61,55 @@
                             <p class="card-text" th:text="${error}"></p>
                         </div>
                     </div>
-                    <h1>Ingresar un nuevo autor</h1>
-                    <div>
-                        <form class="row g-3" th:action="@{/autores/nuevo_autor}" method="POST">
-                            <div class="col-md-6">
-                                <label for="inputTitulo" class="form-label">Nombre del Autor</label>
-                                <input type="text" class="form-control" id="inputTitulo" name="nombre"
-                                    placeholder="Ingrese el nombre de su autor..." th:value="${nombre}" required>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary">¡Guardar autor!</button>
-                            </div>
-                        </form>
+                    <h1>Clientes de la Libreria</h1>
+                    <div class="table-responsive">
+                        <table class="table text-white-75">
+                            <thead>
+                                <tr>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellido</th>
+                                    <th scope="col">Teléfono</th>
+                                    <th scope="col">Prestamos activos</th>
+                                    <th scope="col">¿Cliente activo?</th>
+                                    <th scope="col">Editar</th>
+                                    <th scope="col">Dar de alta/baja</th>
+                                </tr>
+                            </thead>
+                            <!-- Uso de la etiqueta th:each para iterar todos los clientes -->
+                            <tbody th:each="cliente : ${clientes}">
+                                <!-- Usamos los th:text="${objeto.atributo}" para mostrar el dato de cada iteración-->
+                                <tr>
+                                    <th scope="row" th:text="${cliente.dni}"></th>
+                                    <td th:text="${cliente.nombre}"></td>
+                                    <td th:text="${cliente.apellido}"></td>
+                                    <td th:text="${cliente.telefono}"></td>
+                                    <!-- Si cantidad de prestamos no tiene valor aún, se muestr un guión. Sino, se muestra el número -->
+                                    <td th:if="${cliente.cantidadPrestamos} == null">-</td>
+                                    <td th:unless=" ${cliente.cantidadPrestamos}==null"
+                                        th:text="${cliente.cantidadPrestamos}"></td>
+                                    <!-- Uso de la etiqueta th:if & th:unless para mostrar un ícono o el otro según un booleano (alta)-->
+                                    <td>
+                                        <i th:if="${cliente.alta}" class="fas fa-check-circle color-green"></i>
+                                        <i th:unless="${cliente.alta}" class="fas fa-times-circle color-red"></i>
+                                    </td>
+                                    <td><a th:href="@{/clientes/modificar/__${cliente.id}__}"><i
+                                                class="far fa-edit"></i></a>
+                                    </td> <!-- EDITAR -->
+                                    <td>
+                                        <a th:if="${cliente.alta}" th:href="@{/clientes/baja/__${cliente.id}__}"><i
+                                                class="fas fa-trash-alt"></i></a> <!-- DAR BAJA -->
+                                        <a th:unless="${cliente.alta}" th:href="@{/clientes/alta/__${cliente.id}__}"><i
+                                                class="fas fa-arrow-alt-circle-up"></i></a> <!-- DAR ALTA -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-
     <!-- Footer-->
     <footer class="bg-dark py-5">
         <div class="container px-4 px-lg-5">

@@ -43,9 +43,9 @@
         </div>
     </nav>
     <!-- Masthead-->
-    <header class="masthead min-vh-100 align-items-center centrado">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 align-items-center bi-text-left">
+    <header class="masthead min-vh-100">
+        <div class="container px-4 px-lg-5 ">
+            <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center bi-text-left">
                 <div class="col-lg-8 text-white espacios">
                     <div th:if="${exito} != null" class="card text-white bg-success mb-3">
                         <div class="card-body">
@@ -59,16 +59,28 @@
                             <p class="card-text" th:text="${error}"></p>
                         </div>
                     </div>
-                    <h1>Ingresar un nuevo autor</h1>
+                    <h1>Ingresar un nuevo prestamo</h1>
                     <div>
-                        <form class="row g-3" th:action="@{/autores/nuevo_autor}" method="POST">
+                        <form class="row g-3" th:action="@{/prestamos/nuevo_prestamo}" method="POST">
                             <div class="col-md-6">
-                                <label for="inputTitulo" class="form-label">Nombre del Autor</label>
-                                <input type="text" class="form-control" id="inputTitulo" name="nombre"
-                                    placeholder="Ingrese el nombre de su autor..." th:value="${nombre}" required>
+                                <label for="inputCliente" class="form-label">Cliente que realiza el prestamo</label>
+                                <select class="form-control" name="idCliente" id="inputCliente" required>
+                                    <option th:each="cliente : ${clientes}" th:value="${cliente.id}"
+                                        th:text="${cliente.nombre}">
+                                    </option>
+                                </select>
                             </div>
+                            <div class="col-md-6">
+                                <label for="inputLibro" class="form-label">Libro a prestar</label>
+                                <select class="form-control" name="idLibro" id="inputLibro" required>
+                                    <option th:each="libro : ${libros}" th:value="${libro.id}"
+                                        th:text="${libro.titulo}">
+                                    </option>
+                                </select>
+                            </div>
+
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">¡Guardar autor!</button>
+                                <button type="submit" class="btn btn-primary">¡Realizar préstamo!</button>
                             </div>
                         </form>
                     </div>
