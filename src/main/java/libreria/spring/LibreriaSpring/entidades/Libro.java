@@ -7,7 +7,10 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Un Libro tiene una serie de atributos principales: un id único para la base de datos, un número de ISBN, un título, el año de publicación,
+ * una cantidad de ejemplares totales, prestados y restantes, un booleano para determinar si están disponibles o no y dos relaciones:
+ * una relación con un Autor (@ManyToOne) y otra relación con una editorial (@ManyToOne), donde la foreign key de ambas relaciones
+ * se mapea desde esta entidad en la base de datos a razón de evitar la creación de una tabla intermedia.
  * @author Matias Luca Soto
  */
 @Entity

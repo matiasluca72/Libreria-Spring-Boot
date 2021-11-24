@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * Controlador de la Clase Prestamo
  *
  * @author Matias Luca Soto
  */
@@ -35,16 +36,18 @@ public class PrestamoController {
     @Autowired
     private LibroService libroService;
 
-    @GetMapping("/")
-    public String prestamos() {
-        return "prestamos/prestamos";
-    }
-
+    /**
+     * Controlador del formulario para efectuar un nuevo prestamo y persistirlo en la base de datos
+     *
+     * @param modelo
+     * @return Formulario para ingresar un nuevo préstamo
+     */
     @GetMapping("/nuevo_prestamo")
     public String nuevo_prestamo(ModelMap modelo) {
         try {
-            List<Cliente> clientes = clienteService.listarTodos();
-            List<Libro> libros = libroService.listarTodos();
+            //Traemos e inyectamos dos listados con los Libros y Clientes activos para settearlos en el nuevo prestamo
+            List<Cliente> clientes = clienteService.listarActivos();
+            List<Libro> libros = libroService.listarActivos();
             modelo.put("clientes", clientes);
             modelo.put("libros", libros);
         } catch (ClienteServiceException | LibroServiceException e) {
@@ -53,25 +56,40 @@ public class PrestamoController {
         return "prestamos/nuevo_prestamo";
     }
 
+    /**
+     * Controlador POST que recibe los argumentos ingresados e intenta persistir la nueva instancia en la base de datos
+     *
+     * @param modelo
+     * @param idLibro Atributos de la nueva instancia
+     * @param idCliente Atributos de la nueva instancia
+     * @return formulario de nuevo prestamo con un mensaje de éxito o error inyectado
+     */
     @PostMapping("/nuevo_prestamo")
     public String guardar_prestamo(ModelMap modelo, @RequestParam String idLibro, @RequestParam String idCliente) {
 
         try {
-
+            //Intetnamos persistir el nuevo Objeto usando un método de la Clase Service
             prestamoService.crearPrestamo(idLibro, idCliente);
             modelo.put("exito", "¡Prestamo efectuado!");
 
         } catch (ClienteServiceException | LibroServiceException | PrestamoServiceException e) {
-
+            //Inyección del mensaje de error
             modelo.put("error", "¡Algo salió mal! " + e.getMessage());
         }
         return nuevo_prestamo(modelo);
     }
 
+    /**
+     * Controlador que devuelve la vista con el listado con todos los prestamos
+     *
+     * @param modelo
+     * @return la vista con el listado con todos los prestamos
+     */
     @GetMapping("/listado_prestamos")
     public String listado_prestamos(ModelMap modelo) {
 
         try {
+            //Inyección del listado con todos los Prestamos dentro del MOdelMap
             List<Prestamo> prestamos = prestamoService.listarTodos();
             modelo.addAttribute("prestamos", prestamos);
         } catch (PrestamoServiceException e) {
@@ -80,12 +98,23 @@ public class PrestamoController {
         return "prestamos/listado_prestamos";
     }
 
+    /**
+     * Controlador con el formulario de Modificar Prestamo
+     *
+     * @param id De la instancia a modificar
+     * @param modelo
+     * @return Formulario para modificar los atributos de una instancia de Prestamo
+     * @throws ClienteServiceException Si hay algún problema trayendo a las instancias
+     * @throws LibroServiceException Si hay algún problema trayendo a las instancias
+     */
     @GetMapping("/modificar/{id}")
     public String modificarPrestamo(@PathVariable String id, ModelMap modelo) throws ClienteServiceException, LibroServiceException {
 
         try {
-            List<Cliente> clientes = clienteService.listarTodos();
-            List<Libro> libros = libroService.listarTodos();
+            //Se lista y se inyectan los Clientes y Libros activos para ser seleccionados en el tag <select> del HTML,
+            //junto con el Objeto Prestamo a modificar para presetear los valores actuales de este
+            List<Cliente> clientes = clienteService.listarActivos();
+            List<Libro> libros = libroService.listarActivos();
             modelo.put("clientes", clientes);
             modelo.put("libros", libros);
             modelo.put("prestamo", prestamoService.buscarPorId(id));
@@ -95,6 +124,17 @@ public class PrestamoController {
         return "prestamos/modificar_prestamo";
     }
 
+    /**
+     * Controlador POST para recibir los argumentos ingresados en el formulario de Modificar Prestamo e intentar persistir los cambios en la base de datos
+     *
+     * @param id De la instancia a modificar
+     * @param modelo
+     * @param idLibro Atributos actualizados de la instancia Prestamo
+     * @param idCliente Atributos actualizados de la instancia Prestamo
+     * @return Si todo sale bien, el listado con los prestamos actualizados. Sino, el formulario de modificación con un mensaje de error inyectado
+     * @throws ClienteServiceException Si surge algun problema buscando a la entidad
+     * @throws LibroServiceException Si surge algun problema buscando a la entidad
+     */
     @PostMapping("/modificar/{id}")
     public String guardarModificacion(@PathVariable String id, ModelMap modelo, @RequestParam String idLibro, @RequestParam String idCliente) throws ClienteServiceException, LibroServiceException {
 
@@ -108,26 +148,42 @@ public class PrestamoController {
         }
     }
 
+    /**
+     * Controlador para dar de baja una entidad en específico
+     *
+     * @param id De la entidad a dar de baja
+     * @param modelo
+     * @return El listado actualizado con todos los prestamos
+     */
     @GetMapping("/baja/{id}")
     public String darBaja(@PathVariable String id, ModelMap modelo) {
 
         try {
             prestamoService.darBaja(id);
+            return "redirect:/prestamos/listado_prestamos";
         } catch (PrestamoServiceException e) {
             modelo.put("error", "Algo salió mal: " + e.getMessage());
+            return listado_prestamos(modelo);
         }
-        return "redirect:/prestamos/listado_prestamos";
     }
 
+    /**
+     * Controlador para dar de alta una entidad en específico
+     *
+     * @param id De la entidad a dar de alta
+     * @param modelo
+     * @return El listado actualizado con todos los prestamos
+     */
     @GetMapping("/alta/{id}")
     public String darAlta(@PathVariable String id, ModelMap modelo) {
 
         try {
             prestamoService.darAlta(id);
+            return "redirect:/prestamos/listado_prestamos";
         } catch (PrestamoServiceException e) {
             modelo.put("error", "Algo salió mal: " + e.getMessage());
+            return listado_prestamos(modelo);
         }
-        return "redirect:/prestamos/listado_prestamos";
     }
 
 }

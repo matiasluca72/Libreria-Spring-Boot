@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * Controlador del index del proyecto
  *
  * @author Matias Luca Soto
  */
@@ -12,9 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class PortalControlador {
 
+    /**
+     * Controlador del index del proyecto
+     *
+     * @return Vista del Home del proyecto
+     */
     @GetMapping("/")
     public String index() {
         return "index.html";
     }
-    
+
 }

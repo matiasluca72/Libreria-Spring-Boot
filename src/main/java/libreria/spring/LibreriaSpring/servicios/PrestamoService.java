@@ -1,7 +1,6 @@
 package libreria.spring.LibreriaSpring.servicios;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import libreria.spring.LibreriaSpring.entidades.Cliente;
@@ -27,17 +26,26 @@ public class PrestamoService {
     //ATRIBUTOS REPOSITORIOS
     @Autowired
     private PrestamoRepositorio prestamoRepositorio;
+    @Autowired
+    private LibroRepositorio libroRepositorio;
+    @Autowired
+    private ClienteRepositorio clienteRepositorio;
 
     //ATRIBUTOS SERVICES
     @Autowired
     private LibroService libroService;
     @Autowired
     private ClienteService clienteService;
-    @Autowired
-    private LibroRepositorio libroRepositorio;
-    @Autowired
-    private ClienteRepositorio clienteRepositorio;
 
+    /**
+     * Método para crear una nueva instancia de la entidad Prestamo, con los id del Libro y Cliente que conformarán los atributos de esta instancia
+     *
+     * @param idLibro Atributo de la nueva instancia
+     * @param idCliente Atributo de la nueva instancia
+     * @throws LibroServiceException Si no se encuentra el Libro solicitado
+     * @throws ClienteServiceException Si no se encuentra el Cliente solicitado
+     * @throws PrestamoServiceException Si el préstamo no puede efectuarse por falta de ejemplares o algún otro error
+     */
     @Transactional
     public void crearPrestamo(String idLibro, String idCliente) throws LibroServiceException, ClienteServiceException, PrestamoServiceException {
 
@@ -58,6 +66,16 @@ public class PrestamoService {
         prestamoRepositorio.save(prestamo);
     }
 
+    /**
+     * Método para actualizar los atributos de una instancia de Préstamo persistida en la base de datos
+     *
+     * @param idPrestamo De la instancia a buscar y modificar
+     * @param idLibro Atributo actualizado de la instancia
+     * @param idCliente Atributo actualizado de la instancia
+     * @throws LibroServiceException Si no se encuentra el Libro solicitado
+     * @throws ClienteServiceException Si no se encuentra el Cliente solicitado
+     * @throws PrestamoServiceException Si no quedan más ejemplares o no hay cambios con respecto a los valores previos
+     */
     @Transactional
     public void modificarPrestamo(String idPrestamo, String idLibro, String idCliente) throws LibroServiceException, ClienteServiceException, PrestamoServiceException {
 
@@ -87,6 +105,12 @@ public class PrestamoService {
         }
     }
 
+    /**
+     * Método para dar de baja una instancia de Prestamo en la base de datos. De esta forma, se efectua la devolución del préstamos.
+     *
+     * @param id Del Préstamo a dar de baja
+     * @throws PrestamoServiceException Si no se encuentra el prestamo en cuestión
+     */
     @Transactional
     public void darBaja(String id) throws PrestamoServiceException {
 
@@ -103,6 +127,12 @@ public class PrestamoService {
         }
     }
 
+    /**
+     * Método para dar de alta una instancia de Prestamo en la base de datos. De esta forma, se deshace la fecha de devolución del préstamo y se reactiva como pendiente de devolver.
+     *
+     * @param id Del préstamo a dar de alta
+     * @throws PrestamoServiceException Si no se encuentra el prestamo en cuestión
+     */
     @Transactional
     public void darAlta(String id) throws PrestamoServiceException {
 
@@ -119,6 +149,13 @@ public class PrestamoService {
         }
     }
 
+    /**
+     * Busca y devuelve una instancia de Prestamo correspondiente al id pasado como parámetro
+     *
+     * @param id De la instancia a buscar y devolver
+     * @return La instancia de Prestamo correspondiente al id
+     * @throws PrestamoServiceException Si no se encuentra ninguna instancia
+     */
     @Transactional(readOnly = true)
     public Prestamo buscarPorId(String id) throws PrestamoServiceException {
         Optional<Prestamo> respuesta = prestamoRepositorio.findById(id);
@@ -129,17 +166,23 @@ public class PrestamoService {
         }
     }
 
+    /**
+     * Devuelve una lista con todos los Prestamos en la base de datos, sin discriminar
+     *
+     * @return Una List con todas las instancias de Prestamos en la base de datos
+     * @throws PrestamoServiceException Si hubo algún problema con la base de datos
+     */
     @Transactional(readOnly = true)
     public List<Prestamo> listarTodos() throws PrestamoServiceException {
         try {
             return prestamoRepositorio.findAll();
         } catch (Exception e) {
-            throw new PrestamoServiceException("Hubo un problam para traer todos los prestamos.");
+            throw new PrestamoServiceException("Hubo un problema para traer todos los prestamos.");
         }
     }
 
     /**
-     * Método que verifica que el Libro y Cliente existan, resta 1 libro restando y suma 1 de los prestados en los atributos del Libro, setea un nuevo prestamo y cantidad de prestamos en el Cliente, guarda ambos datos actualizados en la base de datos y lo setean en el prestamo para ser finalmente devuelto por el método.
+     * Método que verifica que el Libro y Cliente existan, resta 1 libro restante y suma 1 de los prestados en los atributos del Libro, setea un nuevo prestamo y cantidad de prestamos en el Cliente, guarda ambos datos actualizados en la base de datos y lo setean en el prestamo para ser finalmente devuelto por el método.
      *
      * @param prestamo Donde setear los detalles del nuevo prestamo
      * @param libro Libro que se va a prestar (debe tener al menos 1 ejemplar restante)
@@ -171,15 +214,29 @@ public class PrestamoService {
         //Seteamos el nuevo Cliente al prestamo y actualizamos la cantidad de prestamos activos de ese cliente
         cliente.setCantidadPrestamos(cliente.getCantidadPrestamos() + 1);
 
+        //Seteamos en el Prestamo el Cliente anexado y persistimos el nuevo atributo del mismo
         prestamo.setCliente(cliente);
         clienteRepositorio.save(cliente);
 
+        //Devolvemos el prestamo ya seteado
         return prestamo;
     }
 
+    /**
+     * Método para verificar los parámetros recibidos, verificar que es posible realizar un Préstamo y actualizar los atributos de las 5 instancias pasadas como argumentos, persistiendo a los cambios producidos en las instancias Libro y Cliente
+     *
+     * @param prestamo Donde guardar los valores actualizados
+     * @param libroNuevo Nuevo atributo de la instancia
+     * @param clienteNuevo Nuevo atributo de la instancia
+     * @param libroViejo Atributo anterior de la instancia
+     * @param clienteViejo Atributo anterior de la instancia
+     * @return La instancia de Prestamo con sus atributos actualizados
+     * @throws PrestamoServiceException Si no existen ejemplares restantes del libroNuevo o no se registraron cambios
+     */
     @Transactional
     private Prestamo verificarModificacion(Prestamo prestamo, Libro libroNuevo, Cliente clienteNuevo, Libro libroViejo, Cliente clienteViejo) throws PrestamoServiceException {
 
+        //Booleans para determinar si hubo al menos un cambio en la entidad
         boolean sameBook = false;
         boolean sameClient = false;
 
@@ -221,7 +278,7 @@ public class PrestamoService {
         } else {
             sameBook = true;
         }
-        
+
         //Verificamos si son clientes diferentes
         if (!(clienteNuevo.equals(clienteViejo))) {
 
@@ -243,12 +300,22 @@ public class PrestamoService {
         } else {
             sameClient = true;
         }
+
+        //Si ambos atributos siguen siendo los mismos, se avisa de que no se encontraron cambios
         if (sameBook && sameClient) {
             throw new PrestamoServiceException("No se han registrado cambios.");
         }
+
+        //Si todo salió bien, devolvemos el prestamo con sus atributos actualizados
         return prestamo;
     }
 
+    /**
+     * Método para hacer efectiva la devolución de un ejemplar de una instancia de Libro. Setea y persiste los cambios en el Libro y Cliente anexados a este préstamo
+     *
+     * @param prestamo Instancia a la que se dá de baja
+     * @return El mismo argumento recibido con la baja y fecha de devolución setteadas
+     */
     @Transactional
     private Prestamo devolverPrestamo(Prestamo prestamo) {
 
@@ -275,12 +342,15 @@ public class PrestamoService {
         return prestamo;
     }
 
+    /**
+     * Método que efectua la reactivación de un Prestamo ya creado y devuelto si y solo si aún quedan ejemplares restantes en el Libro guardado en este préstamo. Si es posible realizar la reactivación, se setteará en null el atributo de fechaDevolucion del Prestamo
+     *
+     * @param prestamo A dar la reactivación
+     * @return El mismo prestamo resetteado para estar de alta
+     * @throws PrestamoServiceException Si ya no quedan ejemplares restantes del Libro guardado en el Prestamo
+     */
     @Transactional
     private Prestamo reactivarPrestamo(Prestamo prestamo) throws PrestamoServiceException {
-
-        //Seteamos los nuevos atributos al prestamo...
-        prestamo.setFechaDevolucion(null);
-        prestamo.setAlta(true);
 
         //Traemos al Libro y al Cliente de este prestamo
         Libro libro = prestamo.getLibro();
@@ -291,7 +361,7 @@ public class PrestamoService {
             libro.setEjemplaresPrestados(libro.getEjemplaresPrestados() + 1);
             libro.setEjemplaresRestantes(libro.getEjemplaresRestantes() - 1);
         } else {
-            throw new PrestamoServiceException("No quedan más ejemplares disponibles de este libro.");
+            throw new PrestamoServiceException("No quedan más ejemplares disponibles de este libro actualmente.");
         }
 
         //Seteamos devuelta el Libro en la lista de prestamos del Cliente y actualizamos su total de prestamos activos
@@ -300,6 +370,10 @@ public class PrestamoService {
         //Y persistimos todos los cambios en Libro y Cliente
         libroRepositorio.save(libro);
         clienteRepositorio.save(cliente);
+
+        //Seteamos los nuevos atributos al prestamo...
+        prestamo.setFechaDevolucion(null);
+        prestamo.setAlta(true);
 
         //Devolvemos el prestamo con la fecha de devolución en null y dado de alta
         return prestamo;

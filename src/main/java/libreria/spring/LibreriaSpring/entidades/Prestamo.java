@@ -11,7 +11,10 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Un Préstamo ocurre cuando se le presta un Libro de la Libreria a un Cliente específico. Cuando esto ocurre, el préstamo se registra
+ * con un código único e irrepetible (id), una fecha de efectuado el préstamo y otra fecha de devolución (que en principio estará como null),
+ * además de un boolean para dar de alta/baja este préstamo y dos relacones: una de @OneToOne con el Libro que se ha prestado, y otra
+ * de @ManyToOne con un Cliente que será el que solicite el préstamo.
  * @author Matias Luca Soto
  */
 @Entity
@@ -122,10 +125,4 @@ public class Prestamo {
         this.cliente = cliente;
     }
 
-    @Override
-    public String toString() {
-        return "Prestamo{" + "id=" + id + ", fechaPrestamo=" + fechaPrestamo + ", fechaDevolucion=" + fechaDevolucion + ", alta=" + alta + ", libro=" + libro + ", cliente=" + cliente + '}';
-    }
-    
-    
 }

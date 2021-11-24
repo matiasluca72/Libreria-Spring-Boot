@@ -8,7 +8,9 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Un Cliente posee una serie de atributos: un id único e irrepetible, un número de documento (DNI), su nombre, apellido, un número
+ * de teléfono, un booleano para darlo de alta/baja, una relación @OneToMany con la Clase Préstamos (siendo que un Cliente puede
+ * efectuar varios Préstamos) mapeados desde esta entidad, y una cantidad total de préstamos activos ligados a este Cliente.
  * @author Matias Luca Soto
  */
 @Entity

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * Controlador de la Clase Autores
  *
  * @author Matias Luca Soto
  */
@@ -24,16 +25,6 @@ public class AutorController {
     //ATRIBUTOS - SERVICES
     @Autowired
     private AutorService autorService;
-
-    /**
-     * Método que devuelve el Menú Principal de Autores para poder ingresar o ver el listado de los autores existentes
-     *
-     * @return Menú Autores
-     */
-    @GetMapping("/")
-    public String autores() {
-        return "autores/autores";
-    }
 
     /**
      * Método que devuelve el formulario vacío para poder ingresar un nuevo Autor a la base de datos
@@ -56,14 +47,14 @@ public class AutorController {
     public String guardar_autor(ModelMap modelo, @RequestParam String nombre) {
 
         try {
-
+            //Se crea y se persiste el nuevo Autor usando el método de la Clase Service
             autorService.crearNuevoAutor(nombre);
             modelo.put("exito", "¡Autor guardado con éxito!");
 
         } catch (AutorServiceException e) {
 
             modelo.put("error", "¡Algo salió mal! " + e.getMessage());
-            modelo.put("nombre", nombre);
+            modelo.put("nombre", nombre); //Inyección del argumento ingresado para no volver a teclearlo desde 0
         }
         return "autores/nuevo_autor";
     }
@@ -100,6 +91,7 @@ public class AutorController {
     public String modificarAutor(@PathVariable String id, ModelMap modelo) {
 
         try {
+            //Se inyecta en el modelo el Objeto Autor correspondiente al id recibido como parámetro
             modelo.put("autor", autorService.buscarPorId(id));
         } catch (AutorServiceException e) {
             modelo.put("error", "Algo salió mal: " + e.getMessage());
@@ -107,10 +99,19 @@ public class AutorController {
         return "autores/modificar_autor";
     }
 
+    /**
+     * Método POST del formulario de Modificar Autor. Si la actualización se efectua de forma exitosa, devuelve el Listado actualizado de Autores. Sino, devuelve nuevamente el formulario para actualizar el Autor
+     *
+     * @param id Del Libro que se modifica
+     * @param modelo De la vista
+     * @param nombre Atributo actualizado de la instancia
+     * @return Si todo sale bien, el listado de autores
+     */
     @PostMapping("/modificar/{id}") //El {id} es el que se recibe como parámetro con la anotación @PathVariable
     public String guardarModificacion(@PathVariable String id, ModelMap modelo, @RequestParam String nombre) {
 
         try {
+            //Se modifica la instancia en la base de datos usando un método de la Clase Service
             autorService.modificarAutor(id, nombre);
             modelo.put("exito", "¡Autor modificado con éxito!");
             return listado_autores(modelo);
@@ -119,51 +120,63 @@ public class AutorController {
             List<Autor> autores = autorService.listarTodos();
             modelo.addAttribute("autores", autores);
             return "autores/listado_autores.html"; */
-            
-            /* Llega a la página correctamente pero no logra llevarse consigo el ModelMap,
+ /* Llega a la página correctamente pero no logra llevarse consigo el ModelMap,
             por lo cual nunca muestra el mensaje de éxito/error
             return "redirect:/autores/listado_autores"; */
-            
-            /* Método encontrado en Google, pero no funciona (o al menos no está bien implementado)
+ /* Método encontrado en Google, pero no funciona (o al menos no está bien implementado)
             attr.addAttribute("exito", "¡Autor modificado con éxito!"); */
-            
-            
         } catch (AutorServiceException e) {
             modelo.put("error", "¡Algo salió mal! " + e.getMessage());
             return modificarAutor(id, modelo);
-            
+
             /* Alternativa para devolver la vista, pero da errores de servidor
             return "autores/modificar/" + id; */
-            
-            /* Llega a la página correctamente pero no logra llevarse consigo el ModelMap,
+ /* Llega a la página correctamente pero no logra llevarse consigo el ModelMap,
             por lo cual nunca muestra el mensaje de éxito/error
             return "redirect:/autores/modificar/" + id; */
-            
-            /* Método encontrado en Google, pero no funciona (o al menos no está bien implementado)
-            attr.addAttribute("error", "¡Algo salió mal! " + e.getMessage()); */ 
+ /* Método encontrado en Google, pero no funciona (o al menos no está bien implementado)
+            attr.addAttribute("error", "¡Algo salió mal! " + e.getMessage()); */
         }
     }
-    
+
+    /**
+     * Devuelve la vista del Listado de Autores una vez dado de baja la instancia seleccionada
+     *
+     * @param id Del Autor a dar de baja
+     * @param modelo De la vista
+     * @return redireccionamiento al listado de autores
+     */
     @GetMapping("/baja/{id}")
     public String darBaja(@PathVariable String id, ModelMap modelo) {
-        
+
         try {
+            //Se da de baja usando un método de la Clase Service
             autorService.darBaja(id);
+            return "redirect:/autores/listado_autores";
         } catch (AutorServiceException e) {
             modelo.put("error", "Algo salió mal: " + e.getMessage());
+            return listado_autores(modelo);
         }
-        return "redirect:/autores/listado_autores";
     }
-    
+
+    /**
+     * Devuelve la vista del Listado de Autores una vez dado de alta la instancia seleccionada
+     *
+     * @param id Del Autor a dar de alta
+     * @param modelo De la vista
+     * @return redireccionamiento al listado de autores
+     */
     @GetMapping("/alta/{id}")
     public String darAlta(@PathVariable String id, ModelMap modelo) {
-        
+
         try {
+            //Se da de alta usando un método de la Clase Service
             autorService.darAlta(id);
+            return "redirect:/autores/listado_autores";
         } catch (AutorServiceException e) {
             modelo.put("error", "Algo salió mal: " + e.getMessage());
+            return listado_autores(modelo);
         }
-        return "redirect:/autores/listado_autores";
     }
 
 }

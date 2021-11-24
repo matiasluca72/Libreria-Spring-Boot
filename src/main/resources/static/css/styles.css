@@ -11899,10 +11899,23 @@ header.masthead .h1 {
   margin-bottom: 30px;
 }
 
+.lateral_margins {
+  margin-left: 10px;
+}
+
+.full_width_btn {
+  width: 100%;
+}
+
 .centrado {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.flex_right {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .centrado_textos {

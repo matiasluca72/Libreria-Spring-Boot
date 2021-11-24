@@ -8,6 +8,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Una editorial posee un único atributo que es su nombre (además de su id único y su boolean alta que determina si está disponible o no). Está ligada a una lista de libros, siendo que una editorial puede pertenecer a varios libros (relación @OneToMany)
  *
  * @author Matias Luca Soto
  */
