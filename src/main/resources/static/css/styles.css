@@ -11933,3 +11933,27 @@ header.masthead .h1 {
 .color-red {
   color: red;
 }
+
+.footer-padding {
+  padding-top: 3rem !important;
+}
+
+.footer-column {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: flex-start;
+}
+
+.footer-item {
+  margin-bottom: 10px;
+}
+
+.footer-item a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-item a:hover {
+  color: var(--bs-primary);
+  text-decoration: none;
+}
