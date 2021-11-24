@@ -46,8 +46,10 @@ Esta ejercitación forma parte del <strong><a href="https://carreras.eggeducacio
   <li>HTML</li>
   <li>CSS</li>
   <li>Bootstrap Components</li>
-  <li>Bootstrap Themes</li>
+  <li>Bootstrap Free Themes</li>
   <li>MySQL Workbench</li>
+  <li>NetBeans IDE</li>
+  <li>Visual Studio Code</li>
 </ul>
   
 < /ESPAÑOL >
