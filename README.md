@@ -30,8 +30,7 @@ Además, podrás realizar verdaderos préstamos de tus Libros a tus Clientes (si
 Tendrás registro de la fecha en la que se realizó cada Prestamo, cuáles están pendientes de devolver y cuáles ya fueron devueltos y en qué fecha.
 <br> <br>
 Esta ejercitación forma parte del <strong><a href="https://carreras.eggeducacion.com/ar/programacion/" target="_blank">curso de FullStack Developer de EGG.</a></strong>
-
-<br> <hr>
+<hr>
 <h2>Dependencias Maven utilizadas </h2>
 <ul>
   <li>Spring Boot DevTools</li>
@@ -42,7 +41,6 @@ Esta ejercitación forma parte del <strong><a href="https://carreras.eggeducacio
   <li>MySQL Driver</li>
 </ul>
 
-<br>
 <h2>Otras tecnologias utilizadas</h2>
 <ul>
   <li>HTML</li>
