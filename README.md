@@ -1,37 +1,39 @@
 # Libreria-Spring-Boot
-< ESPAÑOL >  <br>
-Administrador web de una Libreria o Biblioteca donde se podrán administrar y realizar funciones CRUD (Create, Read, Update & Delete) en Entidades Libros unidas a Entidades Autores y Editoriales, igual de editables y customizables. <br>
-Lista de acciones que se pueden realizar con los Libros:
+
+Web administrator of a Library where CRUD (Create, Read, Update & Delete) functions can be managed and performed in Book Entities linked to Author and Editorial Entities, equally editable and customizable. <br>
+List of actions that can be performed with Book Entities:
+
 <ul>
-<li>Crear Libros con todas sus características principales sin que se repitan el Titulo y el ISBN</li>
-<li>Modificar atributos de Libros ya creados</li>
-<li>Elegir Autores de una lista de Autores creados Y dados de alta</li>
-<li>Elegir Editoriales de una lista de Editoriales creados Y dados de alta</li>
-<li>Ver el listado de todos los Libros, Autores y Editoriales con todos sus atributos y poder darlos de baja en un click</li>
-<li>Establecer una cantidad de ejemplares disponibles de cada Libro</li>
+<li> Create Books with all its main characteristics without repeating the Title and ISBN </li>
+<li> Modify attributes of Books already created </li>
+<li> Choose Authors from a list of Authors created AND enabled </li>
+<li> Choose Editorials from a list of Editorials created AND enabled </li>
+<li> See the list of all Books, Authors and Editorials with all their attributes and be able to disable them in one click </li>
+<li> Establish a quantity of available copies of each Book </li>
 </ul>
 <br>
-A su vez, también se podrá ingresar y tener un listado de Clientes con sus datos personales (Nombre, Apellido, DNI y Teléfono) y poder realizar préstamos a favor de un Cliente
-sobre un Libro en particular. <br>
-Esta funcionalidad de préstamos cuenta con los siguientes features:
+Furthermore, it is also possible to register and have a list of Clients Entities with their personal data (Name, Surname, ID and Telephone number) and to be able to make loans in favor of a Client
+about a particular Book. <br>
+This loan functionality has the following features:
 <ul>
-<li>Poder realizar Préstamos solo en Clientes dados de Alta y con Libros también dados de alta</li>
-<li>Realizar tantos Préstamos se necesiten siempre y cuando el Libro tenga ejemplares disponibles, de lo contrario se avisa con un mensaje de error</li>
-<li>Tener un listado con todos los Prestamos (tanto los pendientes como los ya devueltos) con la fecha de préstamo y la fecha de devolución (si lo hubiese)</li>
-<li>Dar de baja un Préstamo (efectuar la devolución) en un solo click</li>
-<li>También se pueden reactivar Préstamos antiguos si y solo si aún quedan ejemplares restantes del Libro en cuestión</li>
+<li> Make Loans only in enabled Clients and with Books also enabled </li>
+<li> Make as many Loans as necessary as long as the Book has copies available, otherwise an error message will be shown </li>
+<li> Have a list with all the Loans (both pending and those already returned) with the loan date and the repayment date (if any) </li>
+<li> Cancel a Loan (make the refund) in a single click </li>
+<li> Old Loans can also be reactivated if and only if there are still remaining copies of such Book  </li>
 </ul>
 
 <br> <hr>
-Este es un proyecto hecho como ejercitación en el lenguaje <strong>Java 8</strong> utilizando el <strong>Framework Spring con Spring Boot</strong> para diseñar una
-aplicación con un modelo de <strong>diseño MVC.</strong><br> <br>
-En ella, podrás crear, leer, modificar, y dar de baja <strong>(CRUD)</strong> datos escenciales de Objetos como Libros, Autores, Editoriales, Clientes y Préstamos. <br>
-Además, podrás realizar verdaderos préstamos de tus Libros a tus Clientes (siempre y cuando hayan existencias). <br>
-Tendrás registro de la fecha en la que se realizó cada Prestamo, cuáles están pendientes de devolver y cuáles ya fueron devueltos y en qué fecha.
+This is a project made as an exercise in the <strong> Java 8 </strong> language using the <strong> Spring Framework with Spring Boot </strong> to design a
+application with a <strong> MVC layout model. </strong> <br> <br>
+In it, you will be able to Create, Read, Modify, and Delete <strong> (CRUD) </strong> essential data of Entities such as Books, Authors, Editorials, Clients and Loans. <br>
+In addition, you can make real loans of your Books to your Clients (as long as there are stocks). <br>
+You will have a record of the date on which each Loan was made, which ones are pending repayment and which ones have already been returned and on what date.
 <br> <br>
-Esta ejercitación forma parte del <strong><a href="https://carreras.eggeducacion.com/ar/programacion/" target="_blank">curso de FullStack Developer de EGG.</a></strong>
+This exercise is part of the <strong><a href="https://carreras.eggeducacion.com/ar/programacion/" target="_blank">FullStack Developer course from the EGG Cooperation Institute.</a></strong>
+
 <hr>
-<h2>Dependencias Maven utilizadas </h2>
+<h2>Maven dependencies applied: </h2>
 <ul>
   <li>Spring Boot DevTools</li>
   <li>Spring Web</li>
@@ -41,7 +43,7 @@ Esta ejercitación forma parte del <strong><a href="https://carreras.eggeducacio
   <li>MySQL Driver</li>
 </ul>
 
-<h2>Otras tecnologias utilizadas</h2>
+<h2>Other technologies</h2>
 <ul>
   <li>HTML</li>
   <li>CSS</li>
@@ -51,5 +53,3 @@ Esta ejercitación forma parte del <strong><a href="https://carreras.eggeducacio
   <li>NetBeans IDE</li>
   <li>Visual Studio Code</li>
 </ul>
-  
-< /ESPAÑOL >
